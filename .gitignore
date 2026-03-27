@@ -1,0 +1,52 @@
+# Python specific
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+lib/
+lib64/
+include/
+bin/
+share/
+.idea/  # Ignore PyCharm/IntelliJ project files
+.vscode/ # Ignore VS Code project files
+
+# Byte-code files
+*.py[cod]
+
+# Temporary files
+*~
+.*.swp
+
+# IDE-specific caches and files
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+
+# Databases
+*.db
+test.db
+site.db
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env
+.flaskenv
+
+# FastAPI build/dist files
+dist/
+site/
+docs_build/
+
+# macOS files
+.DS_Store
+
+# pip-venv files
+Pipfile.lock
