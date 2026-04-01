@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import select, insert, delete
 from sqlalchemy.orm import Session
 from ..models.model import Team
+from ..schemas.schemas import TeamCreate, TeamResponse
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -25,24 +26,18 @@ class TeamRepository(BaseRepository):
         super().__init__(session)  # stores self.session = session
 
     def get_team_by_id(self, team_id: int):  
-        """Fetches a team by its primary key. The parameters within select are discarded after being
-        used in the query, no need to store them in the instance with self."""
+        """Fetches a team by its primary key. We used a Session.get() as we're working with a 
+        ORM approach within the whole project. The core alternative is also below."""
         
-        return self.session.execute(
-            select(Team).where(Team.id == team_id)  # SQLAlchemy finds model/table by __tablename__
-        )
+        return self.session.get(Team, team_id)
+        # Core alternative: .execute(select(Team).where(Team.id == team_id)) - SQLAlchemy finds model/table by __tablename__
 
     def create_team(self, name: str, titles: int, region: str):
-        self.session.execute(
-            insert(Team),
-            [
-                {"name": name, "titles": titles, "region": region}
-            ]
-        )
-        self.session.commit()
+        new_team = Team(name=name, titles=titles, region=region)
+        self.session.add(new_team)
+        self.session.commit()  # saves pending changes to the database within the current transaction
 
     def delete_team(self, team_id: int):
-        self.session.execute(
-            delete(Team).where(Team.id == team_id)
-        )
-        self.session.commit()  # saves pending changes to the database within the current transaction
+        team_to_del = self.session.get(Team, team_id)
+        self.session.delete(Team, team_to_del)
+        self.session.commit()  
