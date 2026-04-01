@@ -3,50 +3,46 @@ from sqlalchemy import select, insert, delete
 from sqlalchemy.orm import Session
 from ..models.model import Team
 
-class BaseRepository(ABC):
-    def __init__(self, db: Session):
+class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
+    def __init__(self, session: Session):
+        self.session = session
+
+    @abstractmethod  # implements an abstract method without body that will be implemented in child classes
+    def get_team_by_id(self, team_id: int):
         pass
 
     @abstractmethod
-    def get_team_by_id(self, db: Session, team_id: int):
+    def create_team(self, name: str, titles: int, region: str):
         pass
 
     @abstractmethod
-    def create_team(self, db: Session, team: TeamCreate):
-        pass
-
-    @abstractmethod
-    def delete_team(self, db: Session, team_id: int):
+    def delete_team(self, team_id: int):
         pass
 
 
 class TeamRepository(BaseRepository):
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self, session: Session):
+        super().__init__(session)  # stores self.session = session
 
-    def get_team_by_id(self, team_id: int):
-        self.team_id = team_id
-
-        return self.db.execute(
-            select(self.db).where(self.db.id == self.team_id)
+    def get_team_by_id(self, team_id: int):  
+        """Fetches a team by its primary key. The parameters within select are discarded after being
+        used in the query, no need to store them in the instance with self."""
+        
+        return self.session.execute(
+            select(Team).where(Team.id == team_id)  # SQLAlchemy finds model/table by __tablename__
         )
 
-    def create_team(self, team: int, name: str, titles: int, region: str):
-        self.team = team
-        self.name = name
-        self.titles = titles
-        self.region = region
-
-        self.db.execute(
+    def create_team(self, name: str, titles: int, region: str):
+        self.session.execute(
             insert(Team),
             [
-                {"name": self.name, "titles": self.titles, "region": self.region}
+                {"name": name, "titles": titles, "region": region}
             ]
         )
+        self.session.commit()
 
     def delete_team(self, team_id: int):
-        self.team_id = team_id
-
-        self.db.execute(
-            delete(self.db).where(self.db.id == self.team_id)
+        self.session.execute(
+            delete(Team).where(Team.id == team_id)
         )
+        self.session.commit()  # saves pending changes to the database within the current transaction
