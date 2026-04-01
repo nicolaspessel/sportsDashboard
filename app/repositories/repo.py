@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
-from sqlalchemy import select, insert, delete
 from sqlalchemy.orm import Session
 from ..models.model import Team
-from ..schemas.schemas import TeamCreate, TeamResponse
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -39,5 +37,5 @@ class TeamRepository(BaseRepository):
 
     def delete_team(self, team_id: int):
         team_to_del = self.session.get(Team, team_id)
-        self.session.delete(Team, team_to_del)
+        self.session.delete(team_to_del)
         self.session.commit()  
