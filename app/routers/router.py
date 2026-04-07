@@ -1,14 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from ..schemas.schemas import TeamResponse
-from ..services.service import get_team_by_id
-
-def get_session():
-	session = Session()
-	try:
-		yield session  # pause and returns the session value
-	finally:
-		session.close()  # once the session is finished, the session is closed
+from ..db.dbconfigs import get_session
+from ..schemas.schemas import TeamResponse, TeamCreate, TeamBase
+from ..services.service import get_team_by_id, create_new_team, remove_item
 
 router = APIRouter()
 
@@ -20,3 +14,11 @@ def get_team(team_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Item not found")  # terminates function and sends HTTP error
 
     return team
+
+@router.post("/teams/", status_code=201)
+def create_team(team: TeamCreate, session: Session = Depends(get_session)):
+    team = create_new_team(name=team.name, titles=team.titles, region=team.region, session=session)
+    
+@router.delete("/teams/{team_id}", status_code=204)
+def delete_team(team_id: int, session: Session = Depends(get_session)):
+    remove_item(team_id=team_id, session=session)
