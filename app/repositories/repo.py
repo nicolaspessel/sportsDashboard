@@ -36,6 +36,6 @@ class TeamRepository(BaseRepository):
         self.session.commit()  # saves pending changes to the database within the current transaction
 
     def delete_team(self, team_id: int):
-        team_to_del = self.session.get(Teams, team_id)
+        team_to_del = self.session.get(Teams, team_id)  # fetches the team
         self.session.delete(team_to_del)
         self.session.commit()  
