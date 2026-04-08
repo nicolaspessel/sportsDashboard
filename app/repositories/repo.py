@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from ..models.model import Team
+from ..models.model import Teams
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -27,15 +27,15 @@ class TeamRepository(BaseRepository):
         """Fetches a team by its primary key. We used a Session.get() as we're working with a 
         ORM approach within the whole project. The core alternative is also below."""
         
-        return self.session.get(Team, team_id)
+        return self.session.get(Teams, team_id)
         # Core alternative: .execute(select(Team).where(Team.id == team_id)) - SQLAlchemy finds model/table by __tablename__
 
     def create_team(self, name: str, titles: int, region: str):
-        new_team = Team(name=name, titles=titles, region=region)
+        new_team = Teams(name=name, titles=titles, region=region)
         self.session.add(new_team)
         self.session.commit()  # saves pending changes to the database within the current transaction
 
     def delete_team(self, team_id: int):
-        team_to_del = self.session.get(Team, team_id)
+        team_to_del = self.session.get(Teams, team_id)
         self.session.delete(team_to_del)
         self.session.commit()  
