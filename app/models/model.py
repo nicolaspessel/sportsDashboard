@@ -1,7 +1,7 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-Base = declarative_base()  # uses the declarative base object
+class Base(DeclarativeBase):
+    pass
 
 class Teams(Base):  # inherits fom declarative base
     """The Mapped and mapped_column are the modern syntax for SQLAlchemy 2.0, allowing the use of python 
