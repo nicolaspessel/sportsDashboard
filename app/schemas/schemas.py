@@ -5,9 +5,14 @@ class TeamBase(BaseModel):
     region: str
 
 class TeamCreate(TeamBase):
-    pass
+    titles: int = 0
 
 class TeamResponse(TeamBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)  # allows Pydantic to read ORM attributes
+
+class TeamUpdate(BaseModel):
+    name: str | None = None  # creates an optional attribute, sets null by default and can be omitted
+    region: str | None = None
+    titles: int | None = None
