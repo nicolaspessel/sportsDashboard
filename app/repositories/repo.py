@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
 from ..models.model import Teams
+from ..schemas.schemas import TeamUpdate
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -29,6 +30,16 @@ class TeamRepository(BaseRepository):
         
         return self.session.get(Teams, team_id)
         # Core alternative: .execute(select(Team).where(Team.id == team_id)) - SQLAlchemy finds model/table by __tablename__
+
+    def update_team(self, team_id: int, team_update: TeamUpdate):
+        team_obj = self.session.get(Teams, team_id)  # fetches the existing team in the database
+
+        if(team_obj):
+            for field in team_update.model_fields_set:
+                setattr(team_obj, field, getattr(team_update, field))  # update the db w/ the new update_team fields
+            self.session.commit()
+
+        return team_obj
 
     def create_team(self, name: str, titles: int, region: str):
         new_team = Teams(name=name, titles=titles, region=region)
