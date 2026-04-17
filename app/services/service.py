@@ -6,6 +6,10 @@ def get_team_by_id(team_id: int, session: Session):
     team = TeamRepository(session=session)
     return team.get_team_by_id(team_id=team_id)
 
+def get_all_teams(session: Session):
+    teams = TeamRepository(session=session)
+    return teams.get_teams()
+
 def patch_team(team_id: int, team_update: TeamUpdate, session: Session):
     team_to_updt = TeamRepository(session=session)
     return team_to_updt.update_team(team_id=team_id, team_update=team_update)

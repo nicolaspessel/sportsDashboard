@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from ..models.model import Teams
 from ..schemas.schemas import TeamUpdate
@@ -30,6 +31,9 @@ class TeamRepository(BaseRepository):
         
         return self.session.get(Teams, team_id)
         # Core alternative: .execute(select(Team).where(Team.id == team_id)) - SQLAlchemy finds model/table by __tablename__
+
+    def get_teams(self):
+        return self.session.scalars(select(Teams)).all()
 
     def update_team(self, team_id: int, team_update: TeamUpdate):
         team_obj = self.session.get(Teams, team_id)  # fetches the existing team in the database
