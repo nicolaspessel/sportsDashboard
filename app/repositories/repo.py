@@ -13,6 +13,10 @@ class BaseRepository(ABC):  # creates an abstract class the inherits from ABC an
         pass
 
     @abstractmethod
+    def get_teams(self):
+        pass
+
+    @abstractmethod
     def create_team(self, name: str, titles: int, region: str):
         pass
 
