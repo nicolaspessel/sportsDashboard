@@ -7,11 +7,17 @@ class TeamBase(BaseModel):
     region: str
 
 
-class StadiumResponse(BaseModel):
+class StadiumBase(BaseModel):
     name: str
     location: str
 
-    model_config = ConfigDict(from_attributes=True)  # allows Pydantic to read ORM attributess
+
+class StadiumCreate(StadiumBase):
+    pass
+
+
+class StadiumResponse(StadiumBase):
+    model_config = ConfigDict(from_attributes=True)  # allows Pydantic to read ORM attributes
 
 
 class TeamCreate(TeamBase):
