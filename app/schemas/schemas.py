@@ -13,7 +13,7 @@ class StadiumBase(BaseModel):
 
 
 class StadiumCreate(StadiumBase):
-    pass
+    team_id: int
 
 
 class StadiumResponse(StadiumBase):
