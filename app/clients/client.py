@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class BaseClient(ABC):
     def __init__(self, base_url: str):
-        self.url = base_url
+        self.base_url = base_url
 
     def _get(self, endpoint: str, params: dict = None):  # creates HTTP request logic for all child classes
         url = self.base_url + endpoint
@@ -16,6 +16,10 @@ class BaseClient(ABC):
     def get_teams(self):  # public method that allows child classes to indirectly acess the HTTP logic above
         pass
 
+    @abstractmethod
+    def get_team_by_ref(self, team_url):
+        pass
+
 
 class ESPNClient(BaseClient):
     def __init__(self, base_url: str):
@@ -23,3 +27,6 @@ class ESPNClient(BaseClient):
 
     def get_teams(self):
         return self._get("/teams")  # uses the private method implemented on the base class
+    
+    def get_team_by_ref(self, team_url):
+        return self._get(team_url)
