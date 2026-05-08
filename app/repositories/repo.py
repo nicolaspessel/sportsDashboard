@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from ..models.model import Teams
+from ..models.model import Teams, Stadiums
 from ..schemas.schemas import TeamUpdate
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
@@ -48,13 +48,25 @@ class TeamRepository(BaseRepository):
             self.session.commit()
 
         return team_obj
+    
+    def delete_team(self, team_id: int):
+            team_to_del = self.session.get(Teams, team_id)  # fetches the team
+            self.session.delete(team_to_del)
+            self.session.commit() 
 
-    def create_team(self, name: str, titles: int, region: str):
-        new_team = Teams(name=name, titles=titles, region=region)
+    def create_team(self, name: str, abbreviation: str, is_active: bool, titles: int, region: str):
+        new_team = Teams(name=name, abbreviation=abbreviation, is_active=is_active, 
+                         titles=titles, region=region)
+        
         self.session.add(new_team)
         self.session.commit()  # saves pending changes to the database within the current transaction
 
-    def delete_team(self, team_id: int):
-        team_to_del = self.session.get(Teams, team_id)  # fetches the team
-        self.session.delete(team_to_del)
-        self.session.commit()  
+
+class StadiumRepository(BaseRepository):
+    def __init__(self, session: Session):
+        super().__init__(session)  
+
+    def create_stadium(self, name: str, location: str, team_id: int):
+        new_stadium = Stadiums(name=name, location=location, team_id=team_id)  # needs the foreign key
+        self.session.add(new_stadium)
+        self.session.commit()
