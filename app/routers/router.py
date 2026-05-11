@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..db.dbconfigs import get_session
-from ..schemas.schemas import TeamResponse, TeamCreate, TeamUpdate, StadiumCreate
+from ..schemas.schemas import TeamResponse, TeamCreate, TeamUpdate, StadiumCreate, StadiumResponse, \
+    StadiumUpdate
 from ..services.service import get_team_by_id, get_all_teams, create_new_team, patch_team, \
-    create_new_stadium, remove_item
+    create_new_stadium, remove_item, patch_stadium
 from ..exceptions import TeamNotFoundError
 
 router = APIRouter()
@@ -36,6 +37,16 @@ def update_team(team_id: int, team_update: TeamUpdate, session: Session = Depend
         raise HTTPException(status_code=404, detail="Item not found")
     
     return team
+
+
+@router.patch("/stadiums/{stdm_id}", response_model=StadiumResponse)
+def update_stadium(stdm_id: int, stdm_update: StadiumUpdate, session: Session = Depends(get_session)):
+    stadium = patch_stadium(stadium_id=stdm_id, stadium_update=stdm_update, session=session)
+
+    if not stadium:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    return stadium
 
 
 @router.post("/teams/", status_code=201)
