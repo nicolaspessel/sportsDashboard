@@ -17,7 +17,14 @@ class StadiumCreate(StadiumBase):
 
 
 class StadiumResponse(StadiumBase):
+    id: int
+
     model_config = ConfigDict(from_attributes=True)  # allows Pydantic to read ORM attributes
+
+
+class StadiumUpdate(BaseModel):
+    name: str | None = None
+    location: str | None = None
 
 
 class TeamCreate(TeamBase):
