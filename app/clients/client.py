@@ -11,11 +11,6 @@ class BaseClient(ABC):
         response = requests.get(url=url, params=params)
         response.raise_for_status()
         return response.json()
-
-    def _get_absolute(self, url: str):
-        response = requests.get(url=url)
-        response.raise_for_status()
-        return response.json()
     
     @abstractmethod
     def get_teams(self, params: dict = None):  # public method that allows child classes to indirectly acess the HTTP logic above
@@ -34,4 +29,4 @@ class ESPNClient(BaseClient):
         return self._get("/teams", params=params)  # uses the private method implemented on the base class
     
     def get_team_by_ref(self, team_url):
-        return self._get_absolute(team_url)
+        return self._get(team_url)
