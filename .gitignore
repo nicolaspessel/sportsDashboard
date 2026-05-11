@@ -50,3 +50,6 @@ docs_build/
 
 # pip-venv files
 Pipfile.lock
+
+# Personal files
+api-responses
