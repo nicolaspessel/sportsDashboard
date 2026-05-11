@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from ..models.model import Teams, Stadiums
-from ..schemas.schemas import TeamUpdate
+from ..schemas.schemas import TeamUpdate, StadiumUpdate
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -60,11 +60,22 @@ class TeamRepository(BaseRepository):
         
         self.session.add(new_team)
         self.session.commit()  # saves pending changes to the database within the current transaction
+        return new_team
 
 
-class StadiumRepository(BaseRepository):
+class StadiumRepository(ABC):
     def __init__(self, session: Session):
-        super().__init__(session)  
+        self.session = session
+
+    def update_stadium(self, stadium_id: int, stadium_update: StadiumUpdate):
+        stadium_obj = self.session.get(Stadiums, stadium_id)
+
+        if(stadium_obj):
+            for field in stadium_update.model_fields_set:
+                setattr(stadium_obj, field, getattr(stadium_update, field))
+            self.session.commit()
+
+        return stadium_obj
 
     def create_stadium(self, name: str, location: str, team_id: int):
         new_stadium = Stadiums(name=name, location=location, team_id=team_id)  # needs the foreign key
