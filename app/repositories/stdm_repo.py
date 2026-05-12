@@ -1,9 +1,8 @@
-from abc import ABC
 from sqlalchemy.orm import Session
 from models.model import Stadiums
 from schemas.stdm_schema import StadiumUpdate
 
-class StadiumRepository(ABC):
+class StadiumRepository():
     def __init__(self, session: Session):
         self.session = session
 
