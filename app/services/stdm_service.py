@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from repositories.stdm_repo import StadiumRepository
-from repositories.team_repo import TeamRepository
-from schemas.stdm_schema import StadiumUpdate
-from exceptions import TeamNotFoundError
+from ..repositories.stdm_repo import StadiumRepository
+from ..repositories.team_repo import TeamRepository
+from ..schemas.stdm_schema import StadiumUpdate
+from ..exceptions import TeamNotFoundError
 
 def create_new_stadium(name: str, location: str, team_id: int, session: Session):
     team = TeamRepository(session=session).get_team_by_id(team_id=team_id)

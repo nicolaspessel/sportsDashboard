@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from repositories.team_repo import TeamRepository
-from repositories.stdm_repo import StadiumRepository
-from schemas.team_schema import TeamUpdate
-from clients.client import ESPNClient
+from ..repositories.team_repo import TeamRepository
+from ..repositories.stdm_repo import StadiumRepository
+from ..schemas.team_schema import TeamUpdate
+from ..clients.client import ESPNClient
 
 def get_team_by_id(team_id: int, session: Session):
     team = TeamRepository(session=session)
@@ -33,6 +33,7 @@ def get_all_teams(session: Session):
             team_url = ref['$ref'].partition('nba')[2]
             team_data = client.get_team_by_ref(team_url=team_url)
 
+            tm_id = int(team_data.get('id'))
             tm_name = team_data.get('displayName')
             abbreviation = team_data.get('abbreviation')
             is_active = team_data.get('isActive')
@@ -46,7 +47,7 @@ def get_all_teams(session: Session):
                 stdm_name = 'Unknown'
                 stdm_location = 'Unknown'
 
-            new_team = tm_repo.create_team(name=tm_name, abbreviation=abbreviation, is_active=is_active, 
+            new_team = tm_repo.create_team(espn_id=tm_id, name=tm_name, abbreviation=abbreviation, is_active=is_active, 
                                             titles=0, region=tm_region)
             session.commit()
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from db.dbconfigs import get_session
-from schemas.team_schema import TeamResponse, TeamCreate, TeamUpdate
-from services.team_service import get_team_by_id, get_all_teams, create_new_team, patch_team, \
+from ..db.dbconfigs import get_session
+from ..schemas.team_schema import TeamResponse, TeamCreate, TeamUpdate
+from ..services.team_service import get_team_by_id, get_all_teams, create_new_team, patch_team, \
     remove_item
 
 team_router = APIRouter()

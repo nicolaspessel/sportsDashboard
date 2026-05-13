@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from models.model import Stadiums
-from schemas.stdm_schema import StadiumUpdate
+from ..models.model import Stadiums
+from ..schemas.stdm_schema import StadiumUpdate
 
 class StadiumRepository():
     def __init__(self, session: Session):

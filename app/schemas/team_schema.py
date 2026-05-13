@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from stdm_schema import StadiumResponse
+from .stdm_schema import StadiumResponse
 
 class TeamBase(BaseModel):
     name: str

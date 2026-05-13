@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.stdm_schema import StadiumResponse, StadiumCreate, StadiumUpdate
-from services.stdm_service import create_new_stadium, patch_stadium
-from db.dbconfigs import get_session
-from exceptions import TeamNotFoundError
+from ..schemas.stdm_schema import StadiumResponse, StadiumCreate, StadiumUpdate
+from ..services.stdm_service import create_new_stadium, patch_stadium
+from ..db.dbconfigs import get_session
+from ..exceptions import TeamNotFoundError
 
 stdm_router = APIRouter()
 

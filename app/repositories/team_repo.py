@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from models.model import Teams
-from schemas.team_schema import TeamUpdate
+from ..models.model import Teams
+from ..schemas.team_schema import TeamUpdate
 
 class BaseRepository(ABC):  # creates an abstract class the inherits from ABC and have abstract methods
     def __init__(self, session: Session):
@@ -54,8 +54,8 @@ class TeamRepository(BaseRepository):
             self.session.delete(team_to_del)
             self.session.commit() 
 
-    def create_team(self, name: str, abbreviation: str, is_active: bool, titles: int, region: str):
-        new_team = Teams(name=name, abbreviation=abbreviation, is_active=is_active, 
+    def create_team(self, name: str, espn_id: int, abbreviation: str, is_active: bool, titles: int, region: str):
+        new_team = Teams(espn_id=espn_id, name=name, abbreviation=abbreviation, is_active=is_active, 
                          titles=titles, region=region)
         
         self.session.add(new_team)
