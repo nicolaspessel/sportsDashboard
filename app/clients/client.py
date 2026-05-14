@@ -10,6 +10,13 @@ class BaseClient(ABC):
 
         response = requests.get(url=url, params=params)
         response.raise_for_status()
+        print(response.json())
+        return response.json()
+
+    def _get_absolute(self, url: str, params: dict = None):
+        response = requests.get(url=url, params=params)
+        response.raise_for_status()
+        print(response.json())
         return response.json()
     
     @abstractmethod
@@ -18,6 +25,10 @@ class BaseClient(ABC):
 
     @abstractmethod
     def get_team_by_ref(self, team_url):
+        pass
+
+    @abstractmethod
+    def get_roster(self, roster_url):
         pass
 
 
@@ -30,3 +41,6 @@ class ESPNClient(BaseClient):
     
     def get_team_by_ref(self, team_url):
         return self._get(team_url)
+
+    def get_roster(self, roster_url):
+        return self._get_absolute(roster_url)
