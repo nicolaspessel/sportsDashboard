@@ -7,7 +7,7 @@ class AthleteBase(BaseModel):
     weight: int
     height: int
     jersey_num: int
-    debut: int
+    debut: int | None = None
 
 
 class AthleteCreate(AthleteBase):

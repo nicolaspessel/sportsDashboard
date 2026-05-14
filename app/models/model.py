@@ -51,6 +51,6 @@ class Athletes(Base):
     weight: Mapped[int]
     height: Mapped[int]
     jersey_num: Mapped[int]
-    debut: Mapped[int | None]
+    debut: Mapped[int | None] = mapped_column(nullable=True, default=None)
     teams: Mapped[list["Teams"]] = relationship(back_populates="athletes", 
         secondary=association_table)
