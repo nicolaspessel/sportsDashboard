@@ -6,7 +6,7 @@ class AthleteBase(BaseModel):
     age: int
     weight: int
     height: int
-    jersey_num: int
+    jersey_num: int | None = None
     debut: int | None = None
 
 

@@ -23,7 +23,7 @@ def get_team_athletes(team_id: int, session: Session):
             age = player.get('age')
             weight = player.get('weight')
             height = player.get('height')
-            jersey_num = player.get('jersey')
+            jersey_num = player.get('jersey', None)
             debut = player.get('debutYear', None)
 
             athlete.create_athlete(athl_id=athl_id, full_name=full_name, position=position, age=age, weight=weight, 
